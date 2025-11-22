@@ -1,0 +1,372 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Calendar Dropdown Demo - {{ site_settings.site_name|default:"Creative Craft" }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary mb-3">
+                    <i class="fas fa-calendar-alt me-3"></i>Calendar Dropdown Demo
+                </h1>
+                <p class="lead text-muted">Beautiful calendar-style dropdowns for month and year selection</p>
+            </div>
+
+            <div class="row">
+                <!-- Month Dropdown Demo -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calendar me-2"></i>Month Dropdown
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Expiry Month</label>
+                                <select class="form-select" id="demo-month">
+                                    <option value="">Select Month</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Birth Month</label>
+                                <select class="form-select" id="demo-birth-month">
+                                    <option value="">Select Birth Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Year Dropdown Demo -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calendar me-2"></i>Year Dropdown
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Expiry Year</label>
+                                <select class="form-select" id="demo-year">
+                                    <option value="">Select Year</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Graduation Year</label>
+                                <select class="form-select" id="demo-grad-year">
+                                    <option value="">Select Graduation Year</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkout Form Demo -->
+            <div class="card mt-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-credit-card me-2"></i>Checkout Form Demo
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Card Number</label>
+                                <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Expiry Month *</label>
+                                <select class="form-select" id="checkout-month">
+                                    <option value="">Month</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Expiry Year *</label>
+                                <select class="form-select" id="checkout-year">
+                                    <option value="">Year</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Cardholder Name</label>
+                                <input type="text" class="form-control" placeholder="John Doe">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">CVV</label>
+                                <input type="text" class="form-control" placeholder="123">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-credit-card me-2"></i>Process Payment
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Features
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-palette fa-3x text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Military Theme</h6>
+                                <p class="text-muted small">Beautiful military green styling with gradients and animations</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-mobile-alt fa-3x text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Responsive</h6>
+                                <p class="text-muted small">Works perfectly on all devices and screen sizes</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-bolt fa-3x text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Quick Select</h6>
+                                <p class="text-muted small">Quick selection with current month/year buttons</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-calendar-check fa-3x text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Grid Layout</h6>
+                                <p class="text-muted small">Beautiful grid layout for easy selection</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-magic fa-3x text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Animations</h6>
+                                <p class="text-muted small">Smooth animations and hover effects</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-keyboard fa-3x text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Keyboard Support</h6>
+                                <p class="text-muted small">Full keyboard navigation support</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usage Examples -->
+            <div class="card mt-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-code me-2"></i>Usage Examples
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>HTML Usage</h6>
+                            <pre class="bg-light p-3 rounded"><code>&lt;!-- Month Dropdown --&gt;
+&lt;select class="form-select" id="card-exp-month"&gt;
+    &lt;option value=""&gt;Month&lt;/option&gt;
+    &lt;option value="01"&gt;01&lt;/option&gt;
+    &lt;!-- ... more options --&gt;
+&lt;/select&gt;
+
+&lt;!-- Year Dropdown --&gt;
+&lt;select class="form-select" id="card-exp-year"&gt;
+    &lt;option value=""&gt;Year&lt;/option&gt;
+    &lt;option value="2024"&gt;2024&lt;/option&gt;
+    &lt;!-- ... more options --&gt;
+&lt;/select&gt;</code></pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>JavaScript Usage</h6>
+                            <pre class="bg-light p-3 rounded"><code>// Auto-initialization
+// All selects with id containing 'exp-month' or 'month' 
+// are automatically converted to month dropdowns
+
+// Manual initialization
+new CalendarDropdown(selectElement, {
+    type: 'month', // or 'year'
+    placeholder: 'Select Month'
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.feature-icon {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.text-primary {
+    color: #3d5a40 !important;
+}
+
+pre {
+    font-size: 0.875rem;
+    border-radius: 8px;
+}
+
+.bg-light {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Initialize demo dropdowns
+    new CalendarDropdown(document.getElementById('demo-month'), {
+        type: 'month',
+        placeholder: 'Select Month'
+    });
+    
+    new CalendarDropdown(document.getElementById('demo-birth-month'), {
+        type: 'month',
+        placeholder: 'Select Birth Month'
+    });
+    
+    new CalendarDropdown(document.getElementById('demo-year'), {
+        type: 'year',
+        placeholder: 'Select Year'
+    });
+    
+    new CalendarDropdown(document.getElementById('demo-grad-year'), {
+        type: 'year',
+        placeholder: 'Select Graduation Year'
+    });
+    
+    new CalendarDropdown(document.getElementById('checkout-month'), {
+        type: 'month',
+        placeholder: 'Month'
+    });
+    
+    new CalendarDropdown(document.getElementById('checkout-year'), {
+        type: 'year',
+        placeholder: 'Year'
+    });
+    
+    // Form submission demo
+    $('form').on('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+        
+        console.log('Form Data:', data);
+        alert('Form submitted! Check console for data.');
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+{% block title %}Email Confirmed - {{ site_settings.site_name|default:"Creative Craft" }}{% endblock %}
+
+{% block content %}
+<div class="account-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="account-card">
+                <div class="card-body p-5 text-center">
+                    <div class="success-animation mb-4">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle fa-5x text-success"></i>
+                        </div>
+                        <div class="success-checkmark">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    
+                    <h2 class="fw-bold text-success mb-3">Email Confirmed!</h2>
+                    <p class="lead text-muted mb-4">Your email address has been successfully verified. You can now access all features of your account.</p>
+                    
+                    <div class="card border-0 bg-light mb-4">
+                        <div class="card-body">
+                            <h5 class="fw-bold text-dark mb-3">What's Next?</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="feature-icon me-3">
+                                            <i class="fas fa-shopping-cart fa-2x text-primary"></i>
+                                        </div>
+                                        <div class="text-start">
+                                            <h6 class="fw-bold mb-1">Start Shopping</h6>
+                                            <small class="text-muted">Browse our military gear collection</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="feature-icon me-3">
+                                            <i class="fas fa-user fa-2x text-primary"></i>
+                                        </div>
+                                        <div class="text-start">
+                                            <h6 class="fw-bold mb-1">Complete Profile</h6>
+                                            <small class="text-muted">Add your personal information</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg me-md-2">
+                            <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                        </a>
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-user me-2"></i>View Profile
+                        </a>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-top">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <a href="{% url 'core:home' %}" class="btn btn-outline-secondary w-100">
+                                    <i class="fas fa-home me-1"></i>Home
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{% url 'core:contact' %}" class="btn btn-outline-info w-100">
+                                    <i class="fas fa-phone me-1"></i>Support
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="card mt-4 border-0 bg-success bg-opacity-10">
+                <div class="card-body text-center py-3">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-shield-alt text-success me-2"></i>
+                        <small class="text-success fw-bold">
+                            Your account is now fully verified and secure. Welcome to Creative Craft!
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.success-animation {
+    position: relative;
+    display: inline-block;
+}
+
+.success-icon {
+    animation: bounceIn 1s ease-out;
+}
+
+.success-checkmark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 2rem;
+    animation: checkmark 0.6s ease-out 0.5s both;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes checkmark {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+.card {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    transition: all 0.3s ease !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-outline-primary {
+    border-color: #3d5a40;
+    color: #3d5a40;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3d5a40;
+    border-color: #3d5a40;
+    transform: translateY(-1px);
+}
+
+.btn-outline-secondary {
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    transform: translateY(-1px);
+}
+
+.btn-outline-info {
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-info:hover {
+    transform: translateY(-1px);
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.card.shadow-lg {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+.bg-light {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+
+.bg-success.bg-opacity-10 {
+    background: linear-gradient(135deg, rgba(25, 135, 84, 0.1) 0%, rgba(25, 135, 84, 0.05) 100%) !important;
+}
+</style>
+{% endblock %}

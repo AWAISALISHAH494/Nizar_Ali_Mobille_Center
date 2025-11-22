@@ -1,0 +1,25 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+{% block title %}Test Page{% endblock %}
+
+{% block content %}
+<div class="account-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="account-card">
+                    <div class="card-body text-center">
+                        <div class="account-icon">
+                            <i class="fas fa-test"></i>
+                        </div>
+                        <h2 class="account-title">Test Page</h2>
+                        <p class="account-subtitle">This is a test to see if the styling works.</p>
+                        <button class="account-btn">Test Button</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

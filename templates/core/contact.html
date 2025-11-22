@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - {{ site_settings.site_name|default:"Ecommerce Store" }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 mb-4">
+                <h1 class="fw-bold text-gradient">Contact Us</h1>
+                <p class="text-muted">Questions about custom patches, name plates, division signs, shields, or dog tags? Send us a message.</p>
+                <div class="mt-4">
+                    <p class="mb-2"><i class="fas fa-envelope me-2 text-primary"></i>{{ site_settings.email|default:"support@example.com" }}</p>
+                    <p class="mb-2"><i class="fas fa-phone me-2 text-primary"></i>{{ site_settings.phone|default:"+1 (000) 000-0000" }}</p>
+                    <p class="mb-0"><i class="fas fa-map-marker-alt me-2 text-primary"></i>{{ site_settings.address|default:"USA" }}</p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">Send a message</h5>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+

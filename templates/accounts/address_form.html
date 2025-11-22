@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load ui_extras %}
+
+{% block title %}{% if object %}Edit Address{% else %}Add Address{% endif %} - {{ site_settings.site_name|default:"Creative Craft" }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-map-marker-alt me-3"></i>
+                        <h4 class="mb-0">{% if object %}Edit Address{% else %}Add New Address{% endif %}</h4>
+                    </div>
+                </div>
+                <div class="card-body p-5">
+                    <form method="post" class="account-form">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Address Type *</label>
+                                {{ form.address_type|add_class:"form-select" }}
+                                {% if form.address_type.errors %}
+                                    <div class="text-danger small">{{ form.address_type.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check mt-4">
+                                    {{ form.is_default|add_class:"form-check-input" }}
+                                    <label class="form-check-label" for="{{ form.is_default.id_for_label }}">
+                                        Set as default address
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name *</label>
+                                {{ form.first_name|add_class:"form-control" }}
+                                {% if form.first_name.errors %}
+                                    <div class="text-danger small">{{ form.first_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name *</label>
+                                {{ form.last_name|add_class:"form-control" }}
+                                {% if form.last_name.errors %}
+                                    <div class="text-danger small">{{ form.last_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Company</label>
+                            {{ form.company|add_class:"form-control" }}
+                            {% if form.company.errors %}
+                                <div class="text-danger small">{{ form.company.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Address Line 1 *</label>
+                            {{ form.address_line_1|add_class:"form-control" }}
+                            {% if form.address_line_1.errors %}
+                                <div class="text-danger small">{{ form.address_line_1.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Address Line 2</label>
+                            {{ form.address_line_2|add_class:"form-control" }}
+                            {% if form.address_line_2.errors %}
+                                <div class="text-danger small">{{ form.address_line_2.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">City *</label>
+                                {{ form.city|add_class:"form-control" }}
+                                {% if form.city.errors %}
+                                    <div class="text-danger small">{{ form.city.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">State *</label>
+                                {{ form.state|add_class:"form-control" }}
+                                {% if form.state.errors %}
+                                    <div class="text-danger small">{{ form.state.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Postal Code *</label>
+                                {{ form.postal_code|add_class:"form-control" }}
+                                {% if form.postal_code.errors %}
+                                    <div class="text-danger small">{{ form.postal_code.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Country *</label>
+                                {{ form.country|add_class:"form-select" }}
+                                {% if form.country.errors %}
+                                    <div class="text-danger small">{{ form.country.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phone Number</label>
+                                {{ form.phone_number|add_class:"form-control" }}
+                                {% if form.phone_number.errors %}
+                                    <div class="text-danger small">{{ form.phone_number.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'accounts:address_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>{% if object %}Update Address{% else %}Add Address{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Military styling for address form */
+.card {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%) !important;
+    border: none !important;
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    padding: 0.75rem 2rem !important;
+    transition: all 0.3s ease !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    background: linear-gradient(135deg, #2d4a30 0%, #4a5f2a 100%) !important;
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d !important;
+    color: #6c757d !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 2rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    color: white !important;
+    transform: translateY(-1px) !important;
+}
+
+.form-control, .form-select {
+    border-radius: 10px !important;
+    border: 2px solid #e9ecef !important;
+    padding: 0.75rem 1rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #3d5a40 !important;
+    box-shadow: 0 0 0 0.2rem rgba(61, 90, 64, 0.25) !important;
+}
+
+.form-label {
+    font-weight: 600 !important;
+    color: #2c3e50 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.form-check-input:checked {
+    background-color: #3d5a40 !important;
+    border-color: #3d5a40 !important;
+}
+
+.form-check-label {
+    font-weight: 500 !important;
+    color: #2c3e50 !important;
+}
+
+.card.shadow-lg {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+    font-size: 0.875rem !important;
+    margin-top: 0.25rem !important;
+}
+</style>
+{% endblock %}

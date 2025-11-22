@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - {{ site_settings.site_name|default:"Ecommerce Store" }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4">
+                <h1 class="display-5 fw-bold text-gradient">About {{ site_settings.site_name|default:"Our Store" }}</h1>
+                <p class="lead text-muted mt-3">We specialize in premium military-grade customized products: unit patches, embroidered name tapes, division signs, shields, dog tags, morale patches, insignias, and more.</p>
+                <ul class="list-unstyled mt-3">
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Authentic, durable materials</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Custom engraving and embroidery</li>
+                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Rapid production and shipping</li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <img src="{% static 'images/about-military.jpg' %}" alt="About" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-shield-alt fa-2x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Mission</h5>
+                        <p class="text-muted">Provide reliable, professional-grade identity and unit pride products to service members and supporters.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-helmet-safety fa-2x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Quality</h5>
+                        <p class="text-muted">High-tensile stitching, durable metals, UV-resistant inks, long-wear adhesives.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="fas fa-bolt fa-2x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Speed</h5>
+                        <p class="text-muted">Configured workflows for fast customization, proofing, and shipment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+

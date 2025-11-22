@@ -1,0 +1,685 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - {{ site_settings.site_name|default:"Ecommerce Store" }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Checkout</h2>
+            
+            {% if cart and cart.items.exists %}
+            <form method="post" id="checkout-form">
+                {% csrf_token %}
+                <div class="row">
+                    <!-- Checkout Form -->
+                    <div class="col-lg-8">
+                        <!-- Billing Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Billing Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">First Name *</label>
+                                        <input type="text" class="form-control" name="billing_first_name" placeholder="John" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Last Name *</label>
+                                        <input type="text" class="form-control" name="billing_last_name" placeholder="Doe" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" name="billing_email" placeholder="john.doe@example.com" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Phone Number *</label>
+                                    <input type="tel" class="form-control" name="billing_phone" placeholder="0300-1234567" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Address Line 1 *</label>
+                                    <input type="text" class="form-control" name="billing_address_line_1" placeholder="123 Main Street" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Address Line 2</label>
+                                    <input type="text" class="form-control" name="billing_address_line_2" placeholder="Apt 4B (optional)">
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">City *</label>
+                                        <select class="form-select" id="billing_city_select" required>
+                                            <option value="">Select City</option>
+                                            {% for city in pakistan_cities %}
+                                            <option value="{{ city }}">{{ city }}</option>
+                                            {% endfor %}
+                                            <option value="other">Other</option>
+                                        </select>
+                                        <input type="text" class="form-control mt-2 d-none" id="billing_city_other" placeholder="Enter city name">
+                                        <input type="hidden" name="billing_city" id="billing_city" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Province/State *</label>
+                                        <input type="text" class="form-control" name="billing_state" placeholder="Punjab" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Postal Code *</label>
+                                        <input type="text" class="form-control" name="billing_postal_code" placeholder="54000" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Country *</label>
+                                    <select class="form-select" name="billing_country" required>
+                                        <option value="">Select Country</option>
+                                        <option value="PK" selected>Pakistan</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Shipping Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="same-as-billing">
+                                    <label class="form-check-label" for="same-as-billing">
+                                        Same as billing address
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body" id="shipping-info">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">First Name *</label>
+                                        <input type="text" class="form-control" name="shipping_first_name" placeholder="John" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Last Name *</label>
+                                        <input type="text" class="form-control" name="shipping_last_name" placeholder="Doe" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Address Line 1 *</label>
+                                    <input type="text" class="form-control" name="shipping_address_line_1" placeholder="123 Main Street" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Address Line 2</label>
+                                    <input type="text" class="form-control" name="shipping_address_line_2" placeholder="Apt 4B (optional)">
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">City *</label>
+                                        <select class="form-select" id="shipping_city_select" required>
+                                            <option value="">Select City</option>
+                                            {% for city in pakistan_cities %}
+                                            <option value="{{ city }}">{{ city }}</option>
+                                            {% endfor %}
+                                            <option value="other">Other</option>
+                                        </select>
+                                        <input type="text" class="form-control mt-2 d-none" id="shipping_city_other" placeholder="Enter city name">
+                                        <input type="hidden" name="shipping_city" id="shipping_city" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Province/State *</label>
+                                        <input type="text" class="form-control" name="shipping_state" placeholder="Punjab" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Postal Code *</label>
+                                        <input type="text" class="form-control" name="shipping_postal_code" placeholder="54000" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Country *</label>
+                                    <select class="form-select" name="shipping_country" required>
+                                        <option value="">Select Country</option>
+                                        <option value="PK" selected>Pakistan</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Payment Method -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Payment Method</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="payment-methods">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="radio" name="payment_method" value="cod" id="cod" checked>
+                                        <label class="form-check-label" for="cod">
+                                            <i class="fas fa-money-bill-wave me-2"></i>Cash on Delivery (COD)
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- COD Payment Info -->
+                                <div class="alert alert-warning mt-3">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Important:</strong> Delivery charges must be paid in advance via Easypaisa or Jazzcash.
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <h6 class="fw-bold mb-2"><i class="fas fa-mobile-alt me-2"></i>Payment Details for Delivery Charges:</h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Easypaisa:</strong></p>
+                                            <p class="mb-2">Account: <span class="text-primary">03XX-XXXXXXX</span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Jazzcash:</strong></p>
+                                            <p class="mb-2">Account: <span class="text-primary">03XX-XXXXXXX</span></p>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0 small text-muted">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                        Please pay the delivery charges (shown in order summary) before placing your order. 
+                                        The product amount will be collected upon delivery.
+                                    </p>
+                                </div>
+                                
+                                <input type="hidden" name="payment_method" value="cod">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Order Summary -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Order Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Cart Items -->
+                                {% for item in cart.items.all %}
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <h6 class="mb-0">{{ item.product.name }}</h6>
+                                        {% if item.variant %}
+                                            <small class="text-muted">{{ item.variant.name }}</small>
+                                        {% endif %}
+                                        <small class="text-muted">x{{ item.quantity }}</small>
+                                    </div>
+                                    <span class="fw-bold">Rs. {{ item.total_price }}</span>
+                                </div>
+                                {% endfor %}
+                                
+                                <hr>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal</span>
+                                    <span>Rs. {{ cart.total_price }}</span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Delivery Charges</span>
+                                    <span id="delivery-charges-display">
+                                        {% if delivery_charges > 0 %}
+                                            Rs. {{ delivery_charges }}
+                                        {% else %}
+                                            <span class="text-muted">Select city</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                
+                                <div class="alert alert-success py-2 mb-2 d-none" id="free-delivery-message">
+                                    <small><i class="fas fa-gift me-1"></i>Free delivery on orders above Rs. {{ free_delivery_threshold }}</small>
+                                </div>
+                                
+                                {% if cart.total_price >= free_delivery_threshold %}
+                                <script>
+                                $(document).ready(function() {
+                                    $('#free-delivery-message').removeClass('d-none');
+                                });
+                                </script>
+                                {% endif %}
+                                
+                                <hr>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="fw-bold">Total (Product Amount)</span>
+                                    <span class="fw-bold">Rs. {{ cart.total_price }}</span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-4">
+                                    <span class="fw-bold h6">Total with Delivery</span>
+                                    <span class="fw-bold h5 text-primary" id="total-with-delivery">
+                                        Rs. {{ total_with_delivery }}
+                                    </span>
+                                </div>
+                                
+                                <div class="alert alert-warning py-2 mb-3">
+                                    <small>
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        <strong>Note:</strong> Pay delivery charges (Rs. <span id="delivery-charges-note">{{ delivery_charges }}</span>) in advance via Easypaisa/Jazzcash. 
+                                        Product amount (Rs. {{ cart.total_price }}) will be collected on delivery.
+                                    </small>
+                                </div>
+                                
+                                <!-- Place Order Button -->
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3" id="place-order-btn">
+                                    <i class="fas fa-shopping-cart me-2"></i>Place Order (COD)
+                                </button>
+                                
+                                <!-- Security Badges -->
+                                <div class="text-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-shield-alt me-1"></i>
+                                        Secure & Safe Checkout
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+            {% else %}
+            <!-- Empty Cart -->
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+                <h3 class="text-muted">Your cart is empty</h3>
+                <p class="text-muted mb-4">Add some items to your cart before checkout.</p>
+                <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    var cartTotal = parseFloat('{{ cart.total_price }}');
+    
+    // Handle "other" city option for billing
+    $('#billing_city_select').change(function() {
+        var city = $(this).val();
+        if (city === 'other') {
+            $('#billing_city_other').removeClass('d-none').prop('required', true);
+            $('#billing_city_select').prop('required', false);
+            $('#billing_city').val('');
+        } else if (city) {
+            $('#billing_city_other').addClass('d-none').prop('required', false);
+            $('#billing_city_select').prop('required', true);
+            $('#billing_city').val(city);
+        }
+    });
+    
+    // Update hidden field when billing city other is entered
+    $('#billing_city_other').on('input blur', function() {
+        if ($('#billing_city_select').val() === 'other') {
+            $('#billing_city').val($(this).val());
+        }
+    });
+    
+    // Handle "other" city option for shipping
+    $('#shipping_city_select').change(function() {
+        var city = $(this).val();
+        
+        if (city === 'other') {
+            $('#shipping_city_other').removeClass('d-none').prop('required', true);
+            $('#shipping_city_select').prop('required', false);
+            $('#shipping_city').val('');
+        } else if (city) {
+            $('#shipping_city_other').addClass('d-none').prop('required', false);
+            $('#shipping_city_select').prop('required', true);
+            $('#shipping_city').val(city);
+            
+            // Calculate delivery charges when city is selected
+            calculateDeliveryCharges(city);
+        }
+    });
+    
+    // Update hidden field and calculate delivery charges when "other" city is entered
+    $('#shipping_city_other').on('input blur', function() {
+        if ($('#shipping_city_select').val() === 'other') {
+            var city = $(this).val();
+            $('#shipping_city').val(city);
+            if (city && city.trim() !== '') {
+                calculateDeliveryCharges(city);
+            }
+        }
+    });
+    
+    // Same as billing address checkbox
+    $('#same-as-billing').change(function() {
+        if ($(this).is(':checked')) {
+            $('#shipping-info').hide();
+            copyBillingToShipping();
+            
+            // Delivery charge calculation is handled in copyBillingToShipping()
+        } else {
+            $('#shipping-info').show();
+        }
+    });
+    
+    // Form submission for COD
+    $('#checkout-form').submit(function(e) {
+        var form = $(this);
+        
+        // Validate shipping city
+        var shippingCity = $('#shipping_city').val();
+        if (!shippingCity || shippingCity.trim() === '') {
+            e.preventDefault();
+            showAlert('Please select or enter a shipping city', 'error');
+            if ($('#shipping_city_select').val() === 'other') {
+                $('#shipping_city_other').focus();
+            } else {
+                $('#shipping_city_select').focus();
+            }
+            return false;
+        }
+        
+        // Validate billing city
+        var billingCity = $('#billing_city').val();
+        if (!billingCity || billingCity.trim() === '') {
+            e.preventDefault();
+            showAlert('Please select or enter a billing city', 'error');
+            if ($('#billing_city_select').val() === 'other') {
+                $('#billing_city_other').focus();
+            } else {
+                $('#billing_city_select').focus();
+            }
+            return false;
+        }
+        
+        // Show loading state
+        $('#place-order-btn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Processing...');
+        
+        // Let the form submit naturally - CSRF token is already in the form
+        return true;
+    });
+});
+
+function calculateDeliveryCharges(city) {
+    var cartTotal = parseFloat('{{ cart.total_price }}');
+    
+    $.ajax({
+        url: '{% url "orders:get_delivery_charges" %}',
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val(),
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+            'city': city,
+            'cart_total': cartTotal
+        }),
+        success: function(response) {
+            if (response.success) {
+                var deliveryCharges = parseFloat(response.delivery_charges);
+                var totalWithDelivery = parseFloat(response.total_with_delivery);
+                
+                // Update delivery charges display
+                if (response.is_free_delivery) {
+                    $('#delivery-charges-display').html('<span class="text-success">Free</span>');
+                } else {
+                    $('#delivery-charges-display').text('Rs. ' + deliveryCharges.toFixed(2));
+                }
+                
+                // Update total with delivery
+                $('#total-with-delivery').text('Rs. ' + totalWithDelivery.toFixed(2));
+                
+                // Update delivery charges note
+                $('#delivery-charges-note').text(deliveryCharges.toFixed(2));
+                
+                // Show/hide free delivery message
+                if (response.is_free_delivery) {
+                    $('#free-delivery-message').removeClass('d-none');
+                } else {
+                    $('#free-delivery-message').addClass('d-none');
+                }
+            } else {
+                console.error('Error calculating delivery charges:', response.error);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error calculating delivery charges:', error);
+        }
+    });
+}
+
+function copyBillingToShipping() {
+    // Copy billing city to shipping city
+    var billingCitySelectVal = $('#billing_city_select').val();
+    var billingCity = $('#billing_city').val();
+    
+    if (billingCitySelectVal === 'other') {
+        $('#shipping_city_select').val('other');
+        $('#shipping_city_other').val($('#billing_city_other').val()).removeClass('d-none');
+        $('#shipping_city').val(billingCity);
+    } else {
+        $('#shipping_city_select').val(billingCitySelectVal);
+        $('#shipping_city_other').addClass('d-none');
+        $('#shipping_city').val(billingCity);
+    }
+    
+    // Calculate delivery charges after copying
+    if (billingCity && billingCity !== '') {
+        calculateDeliveryCharges(billingCity);
+    }
+    
+    // Copy other fields
+    $('input[name^="billing_"]').not('[name="billing_city"]').each(function() {
+        var billingName = $(this).attr('name');
+        var shippingName = billingName.replace('billing_', 'shipping_');
+        var shippingField = $('input[name="' + shippingName + '"]');
+        if (shippingField.length) {
+            shippingField.val($(this).val());
+        }
+    });
+    
+    $('select[name^="billing_"]').each(function() {
+        var billingName = $(this).attr('name');
+        var shippingName = billingName.replace('billing_', 'shipping_');
+        var shippingField = $('select[name="' + shippingName + '"]');
+        if (shippingField.length) {
+            shippingField.val($(this).val());
+        }
+    });
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Checkout specific styles */
+.payment-methods {
+    margin-bottom: 1rem;
+}
+
+.payment-methods .form-check {
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.payment-methods .form-check:hover {
+    border-color: #3d5a40;
+    background: linear-gradient(135deg, rgba(61, 90, 64, 0.05) 0%, rgba(85, 107, 47, 0.05) 100%);
+}
+
+.payment-methods .form-check:has(.form-check-input:checked) {
+    border-color: #3d5a40;
+    background: linear-gradient(135deg, rgba(61, 90, 64, 0.1) 0%, rgba(85, 107, 47, 0.1) 100%);
+}
+
+/* Fallback for browsers that don't support :has() */
+.payment-methods .form-check-input:checked {
+    background-color: #3d5a40;
+    border-color: #3d5a40;
+}
+
+.payment-methods .form-check-input:checked + .form-check-label {
+    color: #3d5a40;
+    font-weight: 600;
+}
+
+.payment-methods .form-check.active {
+    border-color: #3d5a40;
+    background: linear-gradient(135deg, rgba(61, 90, 64, 0.1) 0%, rgba(85, 107, 47, 0.1) 100%);
+    box-shadow: 0 4px 15px rgba(61, 90, 64, 0.2);
+}
+
+.payment-form {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.payment-form.show {
+    border-color: #3d5a40;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Calendar dropdown fixes for checkout */
+.calendar-dropdown {
+    width: 100%;
+}
+
+.calendar-dropdown-toggle {
+    width: 100%;
+    text-align: left;
+}
+
+/* Enhanced select fallback */
+.enhanced-select {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+    border: 2px solid #e9ecef !important;
+    border-radius: 10px !important;
+    padding: 0.75rem 1rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    font-family: 'Montserrat', sans-serif !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.enhanced-select:hover {
+    border-color: #3d5a40 !important;
+    transform: translateY(-1px) !important;
+}
+
+.enhanced-select:focus {
+    border-color: #3d5a40 !important;
+    box-shadow: 0 0 0 0.2rem rgba(61, 90, 64, 0.25) !important;
+    outline: none !important;
+}
+
+/* Prevent calendar dropdown duplication */
+.calendar-dropdown {
+    display: none !important;
+}
+
+/* Ensure only one select element is visible */
+#card-exp-month,
+#card-exp-year {
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Form validation styles */
+.form-control:invalid {
+    border-color: #dc3545;
+}
+
+.form-control:valid {
+    border-color: #28a745;
+}
+
+/* Button styles */
+.btn-primary {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #2d4a30 0%, #4a5f2a 100%);
+}
+
+/* Card styles */
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%);
+    color: white;
+    border-radius: 15px 15px 0 0 !important;
+    font-weight: 600;
+}
+
+/* Alert styles */
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    border: 2px solid #17a2b8;
+    border-radius: 10px;
+    color: #0c5460;
+    font-weight: 500;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border: 2px solid #ffc107;
+    border-radius: 10px;
+    color: #856404;
+    font-weight: 500;
+}
+
+/* PayPal specific styles */
+#paypal-payment {
+    border: 2px solid #0070ba;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+}
+
+#paypal-payment.show {
+    border-color: #0070ba;
+    background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+    box-shadow: 0 8px 25px rgba(0, 112, 186, 0.2);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,445 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Wishlist - {{ site_settings.site_name|default:"Creative Craft" }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
+                    <i class="fas fa-heart me-2 text-danger"></i>My Wishlist
+                </h2>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                    </a>
+                    <a href="{% url 'cart:cart' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-shopping-cart me-2"></i>View Cart
+                    </a>
+                </div>
+            </div>
+
+            {% if wishlist.items.exists %}
+                <div class="row">
+                    {% for item in wishlist.items.all %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card h-100 wishlist-card">
+                            <div class="position-relative">
+                                {% if item.product.images.first %}
+                                    <img src="{{ item.product.images.first.image.url }}" 
+                                         alt="{{ item.product.name }}" 
+                                         class="card-img-top">
+                                {% else %}
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Wishlist Remove Button -->
+                                <button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 remove-wishlist" 
+                                        data-product-id="{{ item.product.id }}"
+                                        title="Remove from wishlist">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                
+                                <!-- Sale Badge -->
+                                {% if item.product.is_on_sale %}
+                                    <span class="badge bg-danger position-absolute top-0 start-0 m-2">Sale</span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="card-body d-flex flex-column">
+                                <h6 class="card-title">
+                                    <a href="{% url 'products:product_detail' item.product.slug %}" 
+                                       class="text-decoration-none text-dark">
+                                        {{ item.product.name|truncatechars:50 }}
+                                    </a>
+                                </h6>
+                                
+                                <div class="mb-2">
+                                    {% if item.product.is_on_sale %}
+                                        <span class="h5 text-danger fw-bold">Rs. {{ item.product.sale_price }}</span>
+                                        <span class="text-muted text-decoration-line-through ms-2">Rs. {{ item.product.price }}</span>
+                                    {% else %}
+                                        <span class="h5 text-primary fw-bold">Rs. {{ item.product.price }}</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rating me-2">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= item.product.average_rating %}
+                                                    <i class="fas fa-star text-warning"></i>
+                                                {% else %}
+                                                    <i class="far fa-star text-warning"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <small class="text-muted">({{ item.product.reviews.count }})</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-auto">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary move-to-cart" 
+                                                data-product-id="{{ item.product.id }}">
+                                            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                        </button>
+                                        <a href="{% url 'products:product_detail' item.product.slug %}" 
+                                           class="btn btn-outline-primary">
+                                            <i class="fas fa-eye me-2"></i>Quick View
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Bulk Actions -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h6 class="mb-0">Bulk Actions</h6>
+                                <small class="text-muted">Select items to perform bulk actions</small>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-outline-primary" id="select-all">
+                                        <i class="fas fa-check-square me-2"></i>Select All
+                                    </button>
+                                    <button class="btn btn-outline-success" id="move-selected-to-cart">
+                                        <i class="fas fa-shopping-cart me-2"></i>Move to Cart
+                                    </button>
+                                    <button class="btn btn-outline-danger" id="remove-selected">
+                                        <i class="fas fa-trash me-2"></i>Remove Selected
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            {% else %}
+                <!-- Empty Wishlist -->
+                <div class="text-center py-5">
+                    <div class="empty-wishlist-icon mb-4">
+                        <i class="fas fa-heart-broken fa-5x text-muted"></i>
+                    </div>
+                    <h3 class="text-muted mb-3">Your wishlist is empty</h3>
+                    <p class="text-muted mb-4">Start adding items you love to your wishlist!</p>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Military styling for wishlist */
+.wishlist-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: none;
+    overflow: hidden;
+}
+
+.wishlist-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.wishlist-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #2d4a30 0%, #4a5f2a 100%);
+}
+
+.btn-outline-primary {
+    border-color: #3d5a40;
+    color: #3d5a40;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3d5a40;
+    border-color: #3d5a40;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-outline-success {
+    border-color: #28a745;
+    color: #28a745;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    background-color: #28a745;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+}
+
+.badge {
+    border-radius: 20px;
+    font-weight: 600;
+    padding: 0.5em 0.75em;
+}
+
+.rating i {
+    font-size: 0.875rem;
+}
+
+.empty-wishlist-icon {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.text-primary {
+    color: #3d5a40 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-group .btn {
+    border-radius: 10px !important;
+    margin: 0 2px;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Remove from wishlist
+    $('.remove-wishlist').click(function() {
+        var productId = $(this).data('product-id');
+        var card = $(this).closest('.wishlist-card');
+        
+        if (confirm('Are you sure you want to remove this item from your wishlist?')) {
+            $.ajax({
+                url: '/wishlist/remove/',
+                method: 'POST',
+                data: {
+                    'product_id': productId,
+                    'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        card.fadeOut(300, function() {
+                            $(this).remove();
+                            // Check if wishlist is empty
+                            if ($('.wishlist-card').length === 0) {
+                                location.reload();
+                            }
+                        });
+                        showAlert('Item removed from wishlist', 'success');
+                    }
+                },
+                error: function() {
+                    showAlert('Error removing item from wishlist', 'error');
+                }
+            });
+        }
+    });
+
+    // Move to cart
+    $('.move-to-cart').click(function() {
+        var productId = $(this).data('product-id');
+        var button = $(this);
+        
+        $.ajax({
+            url: '/wishlist/move-to-cart/',
+            method: 'POST',
+            data: {
+                'product_id': productId,
+                'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                if (response.success) {
+                    button.closest('.wishlist-card').fadeOut(300, function() {
+                        $(this).remove();
+                        // Check if wishlist is empty
+                        if ($('.wishlist-card').length === 0) {
+                            location.reload();
+                        }
+                    });
+                    showAlert('Item moved to cart successfully!', 'success');
+                    updateCartCount();
+                }
+            },
+            error: function() {
+                showAlert('Error moving item to cart', 'error');
+            }
+        });
+    });
+
+    // Select all functionality
+    $('#select-all').click(function() {
+        var isChecked = $(this).hasClass('active');
+        if (isChecked) {
+            $('.wishlist-card input[type="checkbox"]').prop('checked', false);
+            $(this).removeClass('active').html('<i class="fas fa-check-square me-2"></i>Select All');
+        } else {
+            $('.wishlist-card input[type="checkbox"]').prop('checked', true);
+            $(this).addClass('active').html('<i class="fas fa-square me-2"></i>Deselect All');
+        }
+    });
+
+    // Move selected to cart
+    $('#move-selected-to-cart').click(function() {
+        var selectedItems = $('.wishlist-card input[type="checkbox"]:checked');
+        if (selectedItems.length === 0) {
+            showAlert('Please select items to move to cart', 'warning');
+            return;
+        }
+        
+        var promises = [];
+        selectedItems.each(function() {
+            var productId = $(this).closest('.wishlist-card').find('.move-to-cart').data('product-id');
+            promises.push(
+                $.ajax({
+                    url: '/wishlist/move-to-cart/',
+                    method: 'POST',
+                    data: {
+                        'product_id': productId,
+                        'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+                    }
+                })
+            );
+        });
+        
+        Promise.all(promises).then(function() {
+            showAlert('Selected items moved to cart successfully!', 'success');
+            location.reload();
+        }).catch(function() {
+            showAlert('Error moving selected items to cart', 'error');
+        });
+    });
+
+    // Remove selected
+    $('#remove-selected').click(function() {
+        var selectedItems = $('.wishlist-card input[type="checkbox"]:checked');
+        if (selectedItems.length === 0) {
+            showAlert('Please select items to remove', 'warning');
+            return;
+        }
+        
+        if (confirm('Are you sure you want to remove selected items from your wishlist?')) {
+            var promises = [];
+            selectedItems.each(function() {
+                var productId = $(this).closest('.wishlist-card').find('.remove-wishlist').data('product-id');
+                promises.push(
+                    $.ajax({
+                        url: '/wishlist/remove/',
+                        method: 'POST',
+                        data: {
+                            'product_id': productId,
+                            'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
+                        }
+                    })
+                );
+            });
+            
+            Promise.all(promises).then(function() {
+                showAlert('Selected items removed from wishlist', 'success');
+                location.reload();
+            }).catch(function() {
+                showAlert('Error removing selected items', 'error');
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

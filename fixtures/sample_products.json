@@ -1,0 +1,291 @@
+[
+  {
+    "model": "products.category",
+    "pk": 1,
+    "fields": {
+      "name": "Patches",
+      "description": "Unit, morale, and tactical patches",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 2,
+    "fields": {
+      "name": "Name Plates",
+      "description": "Engraved and embroidered name plates",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 3,
+    "fields": {
+      "name": "Division Signs",
+      "description": "Division and unit signage",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 4,
+    "fields": {
+      "name": "Shields",
+      "description": "Decorative shields and plaques",
+      "parent": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 5,
+    "fields": {
+      "name": "Dog Tags",
+      "description": "Custom dog tags and accessories",
+      "parent": null,
+      "is_active": true
+    }
+  },
+
+  {
+    "model": "products.brand",
+    "pk": 1,
+    "fields": {"name": "ArmoryWorks", "description": "Premium military craft"}
+  },
+  {
+    "model": "products.brand",
+    "pk": 2,
+    "fields": {"name": "TacticalForge", "description": "Tactical-grade materials"}
+  },
+  {
+    "model": "products.brand",
+    "pk": 3,
+    "fields": {"name": "SteelOak", "description": "Engraving & metals"}
+  },
+
+  {
+    "model": "products.product",
+    "pk": 101,
+    "fields": {
+      "name": "Custom Unit Patch",
+      "description": "High-tensile stitched unit patch with hook-and-loop backing.",
+      "short_description": "Durable embroidered unit patch",
+      "category": 1,
+      "brand": 1,
+      "sku": "PATCH-UNIT-001",
+      "price": "12.99",
+      "compare_price": "16.99",
+      "cost_price": "5.00",
+      "weight": "0.10",
+      "dimensions": "3x3 in",
+      "status": "published",
+      "is_featured": true,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 102,
+    "fields": {
+      "name": "Morale Patch - Olive",
+      "description": "PVC morale patch in olive with rugged finish.",
+      "short_description": "PVC morale patch",
+      "category": 1,
+      "brand": 2,
+      "sku": "PATCH-MORALE-OLV-002",
+      "price": "9.99",
+      "compare_price": "12.99",
+      "cost_price": "4.00",
+      "weight": "0.08",
+      "dimensions": "2.5x2.5 in",
+      "status": "published",
+      "is_featured": true,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 103,
+    "fields": {
+      "name": "Embroidered Name Tape",
+      "description": "Custom embroidered name tape in regulation fonts and colors.",
+      "short_description": "Custom embroidered name tape",
+      "category": 2,
+      "brand": 1,
+      "sku": "NAME-TAPE-003",
+      "price": "7.50",
+      "compare_price": "9.50",
+      "cost_price": "3.00",
+      "weight": "0.05",
+      "dimensions": "5x1 in",
+      "status": "published",
+      "is_featured": false,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 104,
+    "fields": {
+      "name": "Engraved Metal Name Plate",
+      "description": "Laser-engraved aluminum name plate with mounting holes.",
+      "short_description": "Laser-engraved metal plate",
+      "category": 2,
+      "brand": 3,
+      "sku": "NAME-PLATE-ALU-004",
+      "price": "18.00",
+      "compare_price": "22.00",
+      "cost_price": "8.00",
+      "weight": "0.30",
+      "dimensions": "6x1.5 in",
+      "status": "published",
+      "is_featured": false,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 105,
+    "fields": {
+      "name": "Division Sign - 82nd Airborne",
+      "description": "UV-resistant printed division sign for indoor/outdoor use.",
+      "short_description": "Outdoor division sign",
+      "category": 3,
+      "brand": 2,
+      "sku": "DIV-SIGN-82AB-005",
+      "price": "45.00",
+      "compare_price": "59.00",
+      "cost_price": "20.00",
+      "weight": "1.20",
+      "dimensions": "12x12 in",
+      "status": "published",
+      "is_featured": true,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 106,
+    "fields": {
+      "name": "Decorative Shield - Eagle Emblem",
+      "description": "Hardwood shield with metal eagle emblem and satin finish.",
+      "short_description": "Hardwood decorative shield",
+      "category": 4,
+      "brand": 3,
+      "sku": "SHIELD-EAGLE-006",
+      "price": "85.00",
+      "compare_price": "99.00",
+      "cost_price": "45.00",
+      "weight": "2.50",
+      "dimensions": "14x18 in",
+      "status": "published",
+      "is_featured": true,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 107,
+    "fields": {
+      "name": "Custom Dog Tags (Set of 2)",
+      "description": "Stainless steel dog tags with embossing and silencers.",
+      "short_description": "Embossed stainless dog tags",
+      "category": 5,
+      "brand": 1,
+      "sku": "DOGTAG-SET-007",
+      "price": "14.99",
+      "compare_price": "18.99",
+      "cost_price": "6.00",
+      "weight": "0.20",
+      "dimensions": "2x1.125 in",
+      "status": "published",
+      "is_featured": true,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 108,
+    "fields": {
+      "name": "Rank Insignia - Velcro",
+      "description": "Standard rank insignia patch with hook-and-loop backing.",
+      "short_description": "Rank insignia patch",
+      "category": 1,
+      "brand": 2,
+      "sku": "RANK-PATCH-008",
+      "price": "6.99",
+      "compare_price": "8.99",
+      "cost_price": "2.50",
+      "weight": "0.05",
+      "dimensions": "2x2 in",
+      "status": "published",
+      "is_featured": false,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 109,
+    "fields": {
+      "name": "Unit Flag - Custom Print",
+      "description": "Weather-resistant unit flag with grommets.",
+      "short_description": "Custom printed unit flag",
+      "category": 3,
+      "brand": 2,
+      "sku": "FLAG-UNIT-009",
+      "price": "39.00",
+      "compare_price": "49.00",
+      "cost_price": "18.00",
+      "weight": "0.90",
+      "dimensions": "24x36 in",
+      "status": "published",
+      "is_featured": false,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 110,
+    "fields": {
+      "name": "Metal Name Plate - Black Anodized",
+      "description": "Black anodized aluminum plate with laser contrast text.",
+      "short_description": "Anodized black plate",
+      "category": 2,
+      "brand": 3,
+      "sku": "NAME-PLATE-BLK-010",
+      "price": "21.00",
+      "compare_price": "26.00",
+      "cost_price": "9.50",
+      "weight": "0.30",
+      "dimensions": "6x1.5 in",
+      "status": "published",
+      "is_featured": false,
+      "is_digital": false,
+      "track_inventory": true,
+      "allow_backorder": true
+    }
+  }
+]
+
+

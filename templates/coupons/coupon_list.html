@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Available Coupons - {{ site_settings.site_name|default:"Creative Craft" }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-tags me-2 text-primary"></i>Available Coupons
+            </h2>
+
+            {% if coupons %}
+                <div class="row">
+                    {% for coupon in coupons %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 coupon-card">
+                            <div class="card-body text-center">
+                                <div class="coupon-icon mb-3">
+                                    <i class="fas fa-ticket-alt fa-3x text-primary"></i>
+                                </div>
+                                
+                                <h5 class="card-title">{{ coupon.code }}</h5>
+                                <p class="card-text">{{ coupon.description }}</p>
+                                
+                                <div class="coupon-details mb-3">
+                                    {% if coupon.discount_type == 'percentage' %}
+                                        <span class="badge bg-success fs-6">{{ coupon.discount_value }}% OFF</span>
+                                    {% else %}
+                                        <span class="badge bg-success fs-6">${{ coupon.discount_value }} OFF</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="coupon-info">
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        Valid until {{ coupon.valid_until|date:"M d, Y" }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-tags fa-5x text-muted mb-4"></i>
+                    <h3 class="text-muted">No coupons available</h3>
+                    <p class="text-muted">Check back later for special offers!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.coupon-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.coupon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.coupon-icon {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.badge {
+    border-radius: 20px;
+    font-weight: 600;
+    padding: 0.5em 0.75em;
+}
+
+.text-primary {
+    color: #3d5a40 !important;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+</style>
+{% endblock %}

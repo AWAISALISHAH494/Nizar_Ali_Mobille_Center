@@ -1,0 +1,198 @@
+{% extends 'account/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Confirm Email - {{ site_settings.site_name|default:"Creative Craft" }}{% endblock %}
+
+{% block content %}
+<div class="account-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="account-card">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <div class="account-icon">
+                                <i class="fas fa-envelope-open-text"></i>
+                            </div>
+                            <h2 class="account-title">Confirm Your Email</h2>
+                            <p class="account-subtitle">We've sent a confirmation link to your email address. Please check your inbox and click the link to verify your account.</p>
+                        </div>
+
+                        {% if confirmation %}
+                            <div class="account-alert alert-info">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <div>
+                                        <strong>Email Confirmation Required</strong><br>
+                                        <small>Please confirm your email address to complete your registration.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}" class="account-form">
+                                {% csrf_token %}
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="account-btn">
+                                        <i class="fas fa-check-circle me-2"></i>Confirm Email Address
+                                    </button>
+                                </div>
+                            </form>
+                        {% else %}
+                            <div class="account-alert alert-warning">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <div>
+                                        <strong>Invalid Confirmation Link</strong><br>
+                                        <small>This email confirmation link is invalid or has expired.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'account_email' %}" class="account-btn-outline">
+                                    <i class="fas fa-envelope me-2"></i>Resend Confirmation Email
+                                </a>
+                                <a href="{% url 'core:home' %}" class="account-btn-outline">
+                                    <i class="fas fa-home me-2"></i>Return to Home
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        <div class="mt-4 pt-4 border-top">
+                            <div class="text-center">
+                                <h6 class="text-muted mb-3">Need Help?</h6>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <a href="{% url 'core:contact' %}" class="account-btn-outline btn-sm w-100">
+                                            <i class="fas fa-phone me-1"></i>Contact Support
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="{% url 'account_login' %}" class="account-btn-outline btn-sm w-100">
+                                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Notice -->
+                <div class="account-card mt-4">
+                    <div class="card-body text-center py-3">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Your email confirmation is secure and encrypted. We never share your personal information.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* Force military styling for email confirmation */
+.account-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    min-height: 100vh !important;
+    padding: 2rem 0 !important;
+}
+
+.account-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+    overflow: hidden !important;
+}
+
+.account-btn {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    padding: 0.75rem 2rem !important;
+    transition: all 0.3s ease !important;
+    color: white !important;
+}
+
+.account-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    background: linear-gradient(135deg, #2d4a30 0%, #4a5f2a 100%) !important;
+}
+
+.account-btn-outline {
+    border: 2px solid #3d5a40 !important;
+    color: #3d5a40 !important;
+    background: transparent !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 2rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.account-btn-outline:hover {
+    background-color: #3d5a40 !important;
+    color: white !important;
+    transform: translateY(-1px) !important;
+}
+
+.account-icon {
+    width: 60px !important;
+    height: 60px !important;
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    font-size: 1.5rem !important;
+    margin: 0 auto 1rem !important;
+    animation: pulse 2s infinite !important;
+}
+
+.account-title {
+    color: #2c3e50 !important;
+    font-weight: 700 !important;
+    margin-bottom: 1rem !important;
+}
+
+.account-subtitle {
+    color: #6c757d !important;
+    font-weight: 500 !important;
+    margin-bottom: 2rem !important;
+}
+
+.account-alert {
+    border-radius: 10px !important;
+    border: none !important;
+    padding: 1rem 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.account-alert.alert-info {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%) !important;
+    color: #1565c0 !important;
+}
+
+.account-alert.alert-warning {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%) !important;
+    color: #ef6c00 !important;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+</style>
+{% endblock %}

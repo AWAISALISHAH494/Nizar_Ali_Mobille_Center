@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Address - {{ site_settings.site_name|default:"Creative Craft" }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-danger text-white">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle me-3"></i>
+                        <h4 class="mb-0">Delete Address</h4>
+                    </div>
+                </div>
+                <div class="card-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-trash-alt fa-4x text-danger mb-3"></i>
+                        <h5 class="text-dark">Are you sure you want to delete this address?</h5>
+                        <p class="text-muted">This action cannot be undone.</p>
+                    </div>
+
+                    <div class="card border-0 bg-light mb-4">
+                        <div class="card-body text-start">
+                            <h6 class="fw-bold">{{ object.get_address_type_display }}</h6>
+                            <div class="address-details">
+                                <p class="mb-1"><strong>{{ object.first_name }} {{ object.last_name }}</strong></p>
+                                {% if object.company %}
+                                    <p class="mb-1">{{ object.company }}</p>
+                                {% endif %}
+                                <p class="mb-1">{{ object.address_line_1 }}</p>
+                                {% if object.address_line_2 %}
+                                    <p class="mb-1">{{ object.address_line_2 }}</p>
+                                {% endif %}
+                                <p class="mb-1">{{ object.city }}, {{ object.state }} {{ object.postal_code }}</p>
+                                <p class="mb-1">{{ object.country }}</p>
+                                {% if object.phone_number %}
+                                    <p class="mb-0"><i class="fas fa-phone me-1"></i>{{ object.phone_number }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" class="d-inline">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{% url 'accounts:address_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>Delete Address
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Military styling for delete confirmation */
+.card {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    border: none !important;
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    padding: 0.75rem 2rem !important;
+    transition: all 0.3s ease !important;
+    color: white !important;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3) !important;
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%) !important;
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d !important;
+    color: #6c757d !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 2rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    color: white !important;
+    transform: translateY(-1px) !important;
+}
+
+.bg-light {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+
+.address-details p {
+    margin-bottom: 0.25rem;
+    color: #6c757d;
+}
+
+.card.shadow-lg {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+}
+</style>
+{% endblock %}
