@@ -1,17 +1,24 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import TemplateView, DetailView
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
-from django.http import JsonResponse
-from django.contrib import messages
-from django.db import transaction
+import json
+import logging
+import uuid
 from decimal import Decimal
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.db import transaction
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
+from django.views.generic import DetailView, TemplateView
+
 from .models import Order, OrderItem, ShippingMethod, TaxRate
 from .utils import calculate_delivery_charges, get_pakistan_cities
 from cart.models import Cart, CartItem
 from accounts.models import Address
-import uuid
-import json
+
+logger = logging.getLogger(__name__)
 
 
 class CheckoutView(TemplateView):
@@ -74,6 +81,7 @@ class CheckoutView(TemplateView):
                 # Get city values from hidden fields (handled by JavaScript)
                 billing_city_value = request.POST.get('billing_city', '').strip()
                 shipping_city_value = request.POST.get('shipping_city', '').strip()
+                billing_email = request.POST.get('billing_email', '').strip()
                 
                 if not billing_city_value:
                     messages.error(request, 'Please select or enter a billing city')
@@ -142,6 +150,17 @@ class CheckoutView(TemplateView):
                 
                 # Clear cart
                 cart.items.all().delete()
+
+                # Email customer about delivery charge payment
+                customer_email = billing_email or (request.user.email if request.user.is_authenticated else '')
+                customer_name = billing_address.first_name or billing_address.last_name
+                transaction.on_commit(lambda: self._send_delivery_charge_email(
+                    order=order,
+                    customer_email=customer_email,
+                    customer_name=customer_name,
+                    delivery_charges=delivery_charges,
+                    total_amount=total_amount
+                ))
                 
                 messages.success(request, 'Order placed successfully!')
                 # Pass order number to success page via session
@@ -151,6 +170,50 @@ class CheckoutView(TemplateView):
         except Exception as e:
             messages.error(request, f'Error processing order: {str(e)}')
             return redirect('cart:cart')
+
+    def _send_delivery_charge_email(self, order, customer_email, customer_name, delivery_charges, total_amount):
+        """Send COD delivery charge instructions to the customer."""
+        if not customer_email:
+            return
+
+        site_name = getattr(settings, 'SITE_BRAND_NAME', 'LUNDKHWAR MOBILE CENTER')
+        easypaisa_number = getattr(settings, 'EASYPAISA_NUMBER', '03129151970')
+        jazzcash_number = getattr(settings, 'JAZZCASH_NUMBER', '03489278571')
+
+        subject = f"{site_name} Order {order.order_number} - Delivery Charges"
+        delivery_amount = f"{delivery_charges:.2f}"
+        total_amount_display = f"{total_amount:.2f}"
+
+        message_lines = [
+            f"Assalam-o-Alaikum {customer_name or 'Customer'},",
+            "",
+            f"Thank you for placing order {order.order_number} at {site_name}.",
+            f"To confirm your delivery we require an advance payment of Rs. {delivery_amount} for delivery charges.",
+            "",
+            "Please send the delivery charges using one of the following options:",
+            f"- Easypaisa: {easypaisa_number}",
+            f"- JazzCash: {jazzcash_number}",
+            "",
+            f"Total order amount: Rs. {total_amount_display}",
+            "",
+            "Once paid, reply to this email or WhatsApp us with the payment screenshot so we can dispatch your parcel promptly.",
+            "",
+            f"Shukriya,",
+            f"{site_name} Team",
+        ]
+
+        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@example.com')
+
+        try:
+            send_mail(
+                subject=subject,
+                message="\n".join(message_lines),
+                from_email=from_email,
+                recipient_list=[customer_email],
+                fail_silently=False,
+            )
+        except Exception as email_error:
+            logger.warning("Failed to send delivery charge email for order %s: %s", order.order_number, email_error)
 
 
 class CheckoutSuccessView(TemplateView):
