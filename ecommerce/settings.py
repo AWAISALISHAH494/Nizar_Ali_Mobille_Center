@@ -327,6 +327,7 @@
 
 """
 Django settings for ecommerce project.
+Optimized for Heroku deployment with AWS S3 media storage.
 """
 
 import os
@@ -334,23 +335,30 @@ from pathlib import Path
 from decouple import config
 import dj_database_url
 
+# -------------------------------------------------------------------
+# BASE & SECRET
+# -------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("SECRET_KEY", default="unsafe-secret-key")
-
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = [host.strip() for host in config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(",") if host.strip()]
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(",")
+    if host.strip()
+]
 
-# Branding and payment contact details
+# -------------------------------------------------------------------
+# SITE INFO / PAYMENTS
+# -------------------------------------------------------------------
 SITE_BRAND_NAME = config("SITE_BRAND_NAME", default="LUNDKHWAR MOBILE CENTER")
 EASYPAISA_NUMBER = config("EASYPAISA_NUMBER", default="03129151970")
 JAZZCASH_NUMBER = config("JAZZCASH_NUMBER", default="03489278571")
 
 # -------------------------------------------------------------------
-# APPLICATIONS
+# APPS
 # -------------------------------------------------------------------
-
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -394,23 +402,21 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # -------------------------------------------------------------------
 # MIDDLEWARE
 # -------------------------------------------------------------------
-
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # LOCAL ONLY (S3 handles prod)
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_ratelimit.middleware.RatelimitMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
 ]
 
-ROOT_URLCONF = "ecommerce.urls"
-
+# -------------------------------------------------------------------
+# TEMPLATES
+# -------------------------------------------------------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -431,30 +437,23 @@ TEMPLATES = [
     },
 ]
 
+ROOT_URLCONF = "ecommerce.urls"
 WSGI_APPLICATION = "ecommerce.wsgi.application"
 
 # -------------------------------------------------------------------
 # DATABASE
 # -------------------------------------------------------------------
-
-DATABASES={
-    'default':{
-        'ENGINE':'django.db.backends.postgresql',
-        'NAME': os.getenv('Database_Name'),
-        'USER': os.getenv("Database_User"),
-        'PASSWORD':os.getenv("Password") ,
-        'HOST': os.getenv("Host"),
-        'PORT':os.getenv('Port'), 
-    }
+DATABASES = {
+    "default": dj_database_url.config(
+        default=config("DATABASE_URL", default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+        conn_max_age=600,
+        ssl_require=not DEBUG,
+    )
 }
 
-
-
-
 # -------------------------------------------------------------------
-# PASSWORDS
+# PASSWORD VALIDATORS
 # -------------------------------------------------------------------
-
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -463,77 +462,22 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # -------------------------------------------------------------------
-# INTERNATIONAL
+# INTERNATIONALIZATION
 # -------------------------------------------------------------------
-
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Karachi"
 USE_I18N = True
 USE_TZ = True
 
 # -------------------------------------------------------------------
-# AWS S3 STORAGE
+# AUTH & ALLAUTH
 # -------------------------------------------------------------------
-
-USE_S3 = config("USE_S3", cast=bool, default=False)
-
-if USE_S3:
-    AWS_ACCESS_KEY_ID=os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY=os.getenv('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME=os.getenv('AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_REGION_NAME=os.getenv('AWS_S3_REGION_NAME')
-
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
-
-    AWS_DEFAULT_ACL = None
-    AWS_S3_FILE_OVERWRITE = False
-    AWS_QUERYSTRING_AUTH = False
-
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-
-    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"
-    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
-
-else:
-    STATIC_URL = "/static/"
-    STATIC_ROOT = BASE_DIR / "staticfiles"
-    MEDIA_URL = "/media/"
-    MEDIA_ROOT = BASE_DIR / "media"
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-STATICFILES_DIRS = [BASE_DIR / "static"]
-
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
-]
-
-# -------------------------------------------------------------------
-# CUSTOM STORAGE BACKENDS (needed for S3 folders)
-# -------------------------------------------------------------------
-
-# Create file: core/storage_backends.py
-"""
-from storages.backends.s3boto3 import S3Boto3Storage
-
-class StaticStorage(S3Boto3Storage):
-    location = "static"
-
-class MediaStorage(S3Boto3Storage):
-    location = "media"
-    file_overwrite = False
-"""
-# -------------------------------------------------------------------
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 AUTH_USER_MODEL = "accounts.User"
 
-# -------------------------------------------------------------------
-# ALLAUTH
-# -------------------------------------------------------------------
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -542,17 +486,11 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
-]
-
 SITE_ID = 1
 
 # -------------------------------------------------------------------
 # EMAIL
 # -------------------------------------------------------------------
-
 EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
 EMAIL_HOST = config("EMAIL_HOST", default="")
 EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
@@ -562,9 +500,44 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@ecommerce.com")
 
 # -------------------------------------------------------------------
-# SECURITY (Production)
+# STATIC & MEDIA
 # -------------------------------------------------------------------
+USE_S3 = config("USE_S3", cast=bool, default=False)
 
+if USE_S3:
+    AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
+
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+
+    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"
+    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
+else:
+    STATIC_URL = "/static/"
+    STATIC_ROOT = BASE_DIR / "staticfiles"
+    STATICFILES_DIRS = [BASE_DIR / "static"]
+
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",
+]
+
+# -------------------------------------------------------------------
+# SECURITY
+# -------------------------------------------------------------------
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -573,23 +546,23 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
-
-
 # -------------------------------------------------------------------
 # CORS
 # -------------------------------------------------------------------
-
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://yourfrontend.com",
 ]
 
 # -------------------------------------------------------------------
-# HEROKU SUPPORT
+# HEROKU
 # -------------------------------------------------------------------
-
 if "DYNO" in os.environ:
     import django_heroku
 
     django_heroku.settings(locals(), staticfiles=False)
 
+# -------------------------------------------------------------------
+# DEFAULT PRIMARY KEY
+# -------------------------------------------------------------------
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
