@@ -527,17 +527,13 @@ if USE_S3:
     DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"  # custom storage class
 
 else:
-    # ---------------------------
-    # Local static & media files (Heroku / development)
-    # ---------------------------
     STATIC_URL = "/static/"
-    STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic output
-    STATICFILES_DIRS = [BASE_DIR / "static"]  # source static folder
+    STATIC_ROOT = BASE_DIR / "staticfiles"      # destination for collectstatic
+    STATICFILES_DIRS = [BASE_DIR / "static"]    # source static folder
 
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
 
-    # Use WhiteNoise for static file serving on Heroku
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ---------------------------
