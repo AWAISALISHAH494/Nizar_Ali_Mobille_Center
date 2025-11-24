@@ -437,14 +437,14 @@ WSGI_APPLICATION = "ecommerce.wsgi.application"
 # DATABASE
 # -------------------------------------------------------------------
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'newdb',
-        'USER': 'awais',
-        'PASSWORD': 'awais123',
-        'HOST': '127.0.0.1',
-        'PORT': '5433',
+DATABASES={
+    'default':{
+        'ENGINE':'django.db.backends.postgresql',
+        'NAME': os.getenv('Database_Name'),
+        'USER': os.getenv("Database_User"),
+        'PASSWORD':os.getenv("Password") ,
+        'HOST': os.getenv("Host"),
+        'PORT':os.getenv('Port'), 
     }
 }
 
@@ -478,10 +478,10 @@ USE_TZ = True
 USE_S3 = config("USE_S3", cast=bool, default=False)
 
 if USE_S3:
-    AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
-    AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="ap-south-1")
+    AWS_ACCESS_KEY_ID=os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY=os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME=os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME=os.getenv('AWS_S3_REGION_NAME')
 
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
 
