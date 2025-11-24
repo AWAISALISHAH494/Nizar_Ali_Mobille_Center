@@ -1,0 +1,392 @@
+/* Custom CSS for Ecommerce Store */
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --border-radius: 0.375rem;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --transition: all 0.3s ease;
+}
+
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-color);
+}
+
+/* Navigation */
+.navbar {
+    transition: var(--transition);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.1;
+}
+
+/* Product Cards */
+.product-card {
+    transition: var(--transition);
+    border: 1px solid #e9ecef;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.product-actions {
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.product-card:hover .product-actions {
+    opacity: 1;
+}
+
+.product-actions .btn {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    transition: var(--transition);
+}
+
+.product-actions .btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Rating Stars */
+.rating {
+    display: flex;
+    align-items: center;
+}
+
+.rating .fas.fa-star,
+.rating .far.fa-star {
+    font-size: 0.875rem;
+}
+
+/* Buttons */
+.btn {
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: var(--transition);
+    border: none;
+    padding: 0.5rem 1rem;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+/* Cards */
+.card {
+    border: 1px solid #e9ecef;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Forms */
+.form-control {
+    border-radius: var(--border-radius);
+    border: 1px solid #ced4da;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Alerts */
+.alert {
+    border-radius: var(--border-radius);
+    border: none;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--success-color);
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--danger-color);
+}
+
+/* Feature Boxes */
+.feature-box {
+    padding: 2rem 1rem;
+    transition: var(--transition);
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+}
+
+.feature-box i {
+    transition: var(--transition);
+}
+
+.feature-box:hover i {
+    transform: scale(1.1);
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(135deg, #343a40 0%, #212529 100%);
+}
+
+footer a {
+    transition: var(--transition);
+}
+
+footer a:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Social Links */
+.social-links a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+}
+
+.social-links a:hover {
+    background: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Loading Spinner */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Cart Badge */
+.position-relative .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Product Images */
+.card-img-top {
+    transition: var(--transition);
+}
+
+.product-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* Dropdown Menus */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: var(--border-radius);
+}
+
+.dropdown-item {
+    transition: var(--transition);
+}
+
+.dropdown-item:hover {
+    background: var(--light-color);
+    color: var(--primary-color);
+}
+
+/* Search Bar */
+.input-group .form-control {
+    border-right: none;
+}
+
+.input-group .btn {
+    border-left: none;
+    background: var(--primary-color);
+    color: white;
+}
+
+.input-group .btn:hover {
+    background: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        text-align: center;
+    }
+    
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .product-actions {
+        opacity: 1;
+    }
+    
+    .feature-box {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+    
+    .hero-section h1 {
+        font-size: 1.75rem;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Utility Classes */
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+}
+
+.shadow-sm {
+    box-shadow: var(--box-shadow) !important;
+}
+
+.shadow {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .btn,
+    footer {
+        display: none !important;
+    }
+}

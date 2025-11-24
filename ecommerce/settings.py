@@ -512,7 +512,6 @@ if USE_S3:
     AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
-
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
@@ -520,31 +519,34 @@ if USE_S3:
 
     # Static files
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"  # custom storage class
+    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"
 
     # Media files
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"  # custom storage class
+    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
 
 else:
+    # ---------------------------
+    # Local / Heroku Static
+    # ---------------------------
     STATIC_URL = "/static/"
-    STATIC_ROOT = BASE_DIR / "staticfiles"      # destination for collectstatic
-    STATICFILES_DIRS = [BASE_DIR / "static"]    # source static folder
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # collectstatic destination
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")] # source folder as string
 
     MEDIA_URL = "/media/"
-    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+    # Whitenoise for Heroku
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ---------------------------
-# Static files finders (common)
+# Static files finders
 # ---------------------------
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "compressor.finders.CompressorFinder",
 ]
-
 # -------------------------------------------------------------------
 # SECURITY
 # -------------------------------------------------------------------
