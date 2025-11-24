@@ -381,7 +381,6 @@ THIRD_PARTY_APPS = [
     "crispy_bootstrap5",
     "import_export",
     "django_cleanup.apps.CleanupConfig",
-    "compressor",
     "storages",
 ]
 
@@ -501,10 +500,10 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@ecommerce.com")
 
 # -------------------------------------------------------------------
-# STATIC & MEDIA FILES (Heroku + S3 + Django Compressor)
+# STATIC & MEDIA FILES (Heroku + S3)
 # -------------------------------------------------------------------
 
-USE_S3 = config("USE_S3", cast=bool, default=True)  # Make sure USE_S3=True on Heroku
+USE_S3 = config("USE_S3", cast=bool, default=True)
 
 if USE_S3:
     # ---------------------------
@@ -532,18 +531,9 @@ if USE_S3:
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
     DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
 
-    # ---------------------------
-    # Django Compressor
-    # ---------------------------
-    # Compressor cannot write directly to S3, so use a local temp folder
-    COMPRESS_ROOT = BASE_DIR / "tmp_static"  # temporary folder for compression
-    COMPRESS_URL = STATIC_URL
-    COMPRESS_ENABLED = True
-    COMPRESS_OFFLINE = True
-
 else:
     # ---------------------------
-    # Local / Heroku WhiteNoise fallback
+    # Local / WhiteNoise fallback
     # ---------------------------
     STATIC_URL = "/static/"
     STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -552,21 +542,6 @@ else:
 
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
-
-    # Django Compressor for local/static fallback
-    COMPRESS_ROOT = STATIC_ROOT
-    COMPRESS_URL = STATIC_URL
-    COMPRESS_ENABLED = True
-    COMPRESS_OFFLINE = True
-
-# ---------------------------
-# Static files finders
-# ---------------------------
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
-]
 # -------------------------------------------------------------------
 # SECURITY
 # -------------------------------------------------------------------
