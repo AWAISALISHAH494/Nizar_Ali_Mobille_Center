@@ -1,0 +1,390 @@
+/* Custom Date Picker Styles - Military Theme */
+.datepicker-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.datepicker-input {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.datepicker-input:focus {
+    border-color: #3d5a40;
+    box-shadow: 0 0 0 0.2rem rgba(61, 90, 64, 0.25);
+    outline: none;
+}
+
+.datepicker-input:hover {
+    border-color: #3d5a40;
+    transform: translateY(-1px);
+}
+
+.datepicker-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #3d5a40;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.datepicker-icon:hover {
+    color: #2d4a30;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Date Picker Dropdown */
+.datepicker-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid #3d5a40;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    margin-top: 5px;
+    overflow: hidden;
+    min-width: 320px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Date Picker Header */
+.datepicker-header {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.datepicker-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.datepicker-nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.datepicker-nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.datepicker-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Date Picker Body */
+.datepicker-body {
+    padding: 1rem;
+}
+
+/* Month/Year Selector */
+.datepicker-month-year {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.datepicker-month-select,
+.datepicker-year-select {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.datepicker-month-select:focus,
+.datepicker-year-select:focus {
+    border-color: #3d5a40;
+    outline: none;
+}
+
+/* Calendar Grid */
+.datepicker-calendar {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.datepicker-calendar th {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #2c3e50;
+    font-weight: 700;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.datepicker-calendar td {
+    padding: 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    position: relative;
+}
+
+.datepicker-calendar td:hover {
+    background: linear-gradient(135deg, rgba(61, 90, 64, 0.1) 0%, rgba(85, 107, 47, 0.1) 100%);
+    transform: scale(1.05);
+}
+
+.datepicker-calendar td.other-month {
+    color: #adb5bd;
+}
+
+.datepicker-calendar td.today {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%);
+    color: white;
+    font-weight: 700;
+}
+
+.datepicker-calendar td.selected {
+    background: linear-gradient(135deg, #2d4a30 0%, #4a5f2a 100%);
+    color: white;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(45, 74, 48, 0.3);
+}
+
+.datepicker-calendar td.disabled {
+    color: #adb5bd;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.datepicker-calendar td.disabled:hover {
+    background: none;
+    transform: none;
+}
+
+/* Time Picker */
+.datepicker-time {
+    border-top: 2px solid #e9ecef;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.datepicker-time-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.datepicker-time-inputs {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.datepicker-time-input {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+    width: 60px;
+    transition: all 0.3s ease;
+}
+
+.datepicker-time-input:focus {
+    border-color: #3d5a40;
+    outline: none;
+}
+
+/* Action Buttons */
+.datepicker-actions {
+    padding: 1rem;
+    border-top: 2px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.datepicker-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.datepicker-btn-primary {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%);
+    color: white;
+}
+
+.datepicker-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #2d4a30 0%, #4a5f2a 100%);
+}
+
+.datepicker-btn-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    color: white;
+}
+
+.datepicker-btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+}
+
+/* Quick Date Selection */
+.datepicker-quick-dates {
+    padding: 1rem;
+    border-top: 2px solid #e9ecef;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.datepicker-quick-dates h6 {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.75rem;
+}
+
+.datepicker-quick-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.datepicker-quick-btn {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.datepicker-quick-btn:hover {
+    border-color: #3d5a40;
+    color: #3d5a40;
+    transform: translateY(-1px);
+}
+
+.datepicker-quick-btn.active {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%);
+    border-color: #3d5a40;
+    color: white;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .datepicker-dropdown {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90vw;
+        max-width: 350px;
+        margin: 0;
+    }
+    
+    .datepicker-calendar th,
+    .datepicker-calendar td {
+        padding: 0.75rem 0.25rem;
+        font-size: 0.875rem;
+    }
+    
+    .datepicker-actions {
+        flex-direction: column;
+    }
+    
+    .datepicker-quick-buttons {
+        justify-content: center;
+    }
+}
+
+/* Animation for date selection */
+@keyframes dateSelect {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.datepicker-calendar td.selecting {
+    animation: dateSelect 0.3s ease-out;
+}
+
+/* Custom scrollbar for dropdown */
+.datepicker-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.datepicker-dropdown::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.datepicker-dropdown::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #3d5a40 0%, #556b2f 100%);
+    border-radius: 4px;
+}
+
+.datepicker-dropdown::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #2d4a30 0%, #4a5f2a 100%);
+}
