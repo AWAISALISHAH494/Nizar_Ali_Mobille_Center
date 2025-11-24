@@ -500,11 +500,14 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@ecommerce.com")
 
 # -------------------------------------------------------------------
-# STATIC & MEDIA
+# STATIC & MEDIA FILES
 # -------------------------------------------------------------------
 USE_S3 = config("USE_S3", cast=bool, default=False)
 
 if USE_S3:
+    # ---------------------------
+    # AWS S3 Settings
+    # ---------------------------
     AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
@@ -515,20 +518,31 @@ if USE_S3:
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_FILE_OVERWRITE = False
 
+    # Static files
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"  # custom storage class
 
-    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"
-    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
+    # Media files
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"  # custom storage class
+
 else:
+    # ---------------------------
+    # Local static & media files (Heroku / development)
+    # ---------------------------
     STATIC_URL = "/static/"
-    STATIC_ROOT = BASE_DIR / "staticfiles"
-    STATICFILES_DIRS = [BASE_DIR / "staticfiles"]
+    STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic output
+    STATICFILES_DIRS = [BASE_DIR / "static"]  # source static folder
 
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
+
+    # Use WhiteNoise for static file serving on Heroku
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# ---------------------------
+# Static files finders (common)
+# ---------------------------
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
