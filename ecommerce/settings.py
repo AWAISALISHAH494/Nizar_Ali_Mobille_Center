@@ -461,6 +461,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+COMPRESS_ENABLED = False
+COMPRESS_OFFLINE = False
 # -------------------------------------------------------------------
 # INTERNATIONALIZATION
 # -------------------------------------------------------------------
