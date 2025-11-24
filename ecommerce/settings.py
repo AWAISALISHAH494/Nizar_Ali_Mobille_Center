@@ -500,9 +500,10 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@ecommerce.com")
 
 # -------------------------------------------------------------------
-# STATIC & MEDIA FILES
+# STATIC & MEDIA FILES (Heroku + S3)
 # -------------------------------------------------------------------
-USE_S3 = config("USE_S3", cast=bool, default=False)
+
+USE_S3 = config("USE_S3", cast=bool, default=True)  # Ensure USE_S3=True on Heroku
 
 if USE_S3:
     # ---------------------------
@@ -516,31 +517,30 @@ if USE_S3:
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_FILE_OVERWRITE = False
+    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 
-    # Static files
+    # Static files (CSS, JS, images)
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"  # custom S3 storage class
+    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"  # Custom S3 storage class
 
-    # Media files
+    # Media files (user uploads)
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"  # custom S3 storage class
+    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"  # Custom S3 storage class
 
 else:
     # ---------------------------
-    # Local / Heroku Static
+    # Local / Heroku WhiteNoise (fallback)
     # ---------------------------
     STATIC_URL = "/static/"
-    STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic destination
-    STATICFILES_DIRS = [BASE_DIR / "static"] # your project-level static folder
-
-    # Use WhiteNoise to serve static files on Heroku
+    STATIC_ROOT = BASE_DIR / "staticfiles"
+    STATICFILES_DIRS = [BASE_DIR / "static"]
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
     MEDIA_URL = "/media/"
-    MEDIA_ROOT = BASE_DIR / "media"  # for uploaded media files
+    MEDIA_ROOT = BASE_DIR / "media"
 
 # ---------------------------
-# Static files finders
+# Static files finders (needed for compressor, S3 ignored)
 # ---------------------------
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
