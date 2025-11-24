@@ -519,25 +519,25 @@ if USE_S3:
 
     # Static files
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"
+    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"  # custom S3 storage class
 
     # Media files
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
+    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"  # custom S3 storage class
 
 else:
     # ---------------------------
     # Local / Heroku Static
     # ---------------------------
     STATIC_URL = "/static/"
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # collectstatic destination
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")] # source folder as string
+    STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic destination
+    STATICFILES_DIRS = [BASE_DIR / "static"] # your project-level static folder
+
+    # Use WhiteNoise to serve static files on Heroku
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
     MEDIA_URL = "/media/"
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-    # Whitenoise for Heroku
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    MEDIA_ROOT = BASE_DIR / "media"  # for uploaded media files
 
 # ---------------------------
 # Static files finders
