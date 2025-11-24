@@ -490,6 +490,12 @@ ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 SITE_ID = 1
 
 # -------------------------------------------------------------------
+# CRISPY FORMS
+# -------------------------------------------------------------------
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# -------------------------------------------------------------------
 # EMAIL
 # -------------------------------------------------------------------
 EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
