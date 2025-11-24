@@ -524,6 +524,7 @@ if USE_S3:
     # ---------------------------
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
     STATICFILES_STORAGE = "core.storage_backends.StaticStorage"
+    STATICFILES_DIRS = [BASE_DIR / "static"]
 
     # ---------------------------
     # Media files (user uploads)
@@ -542,6 +543,13 @@ else:
 
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
+
+# Static files finders (without compressor)
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
+
 # -------------------------------------------------------------------
 # SECURITY
 # -------------------------------------------------------------------
