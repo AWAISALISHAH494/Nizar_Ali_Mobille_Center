@@ -461,8 +461,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-COMPRESS_ENABLED = False
-COMPRESS_OFFLINE = False
+
 # -------------------------------------------------------------------
 # INTERNATIONALIZATION
 # -------------------------------------------------------------------
@@ -502,10 +501,10 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@ecommerce.com")
 
 # -------------------------------------------------------------------
-# STATIC & MEDIA FILES (Heroku + S3)
+# STATIC & MEDIA FILES (Heroku + S3 + Django Compressor)
 # -------------------------------------------------------------------
 
-USE_S3 = config("USE_S3", cast=bool, default=True)  # Ensure USE_S3=True on Heroku
+USE_S3 = config("USE_S3", cast=bool, default=True)  # Make sure USE_S3=True on Heroku
 
 if USE_S3:
     # ---------------------------
@@ -521,17 +520,30 @@ if USE_S3:
     AWS_S3_FILE_OVERWRITE = False
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 
+    # ---------------------------
     # Static files (CSS, JS, images)
+    # ---------------------------
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"  # Custom S3 storage class
+    STATICFILES_STORAGE = "core.storage_backends.StaticStorage"
 
+    # ---------------------------
     # Media files (user uploads)
+    # ---------------------------
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"  # Custom S3 storage class
+    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
+
+    # ---------------------------
+    # Django Compressor
+    # ---------------------------
+    # Compressor cannot write directly to S3, so use a local temp folder
+    COMPRESS_ROOT = BASE_DIR / "tmp_static"  # temporary folder for compression
+    COMPRESS_URL = STATIC_URL
+    COMPRESS_ENABLED = True
+    COMPRESS_OFFLINE = True
 
 else:
     # ---------------------------
-    # Local / Heroku WhiteNoise (fallback)
+    # Local / Heroku WhiteNoise fallback
     # ---------------------------
     STATIC_URL = "/static/"
     STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -541,8 +553,14 @@ else:
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
 
+    # Django Compressor for local/static fallback
+    COMPRESS_ROOT = STATIC_ROOT
+    COMPRESS_URL = STATIC_URL
+    COMPRESS_ENABLED = True
+    COMPRESS_OFFLINE = True
+
 # ---------------------------
-# Static files finders (needed for compressor, S3 ignored)
+# Static files finders
 # ---------------------------
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
