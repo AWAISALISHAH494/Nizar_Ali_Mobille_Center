@@ -510,12 +510,10 @@ DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@ecommerce.com
 # STATIC & MEDIA FILES (Heroku + S3)
 # -------------------------------------------------------------------
 
-USE_S3 = config("USE_S3", cast=bool, default=True)
+USE_S3_STATIC = config("USE_S3_STATIC", cast=bool, default=False)
+USE_S3_MEDIA = config("USE_S3_MEDIA", cast=bool, default=False)
 
-if USE_S3:
-    # ---------------------------
-    # AWS S3 Settings
-    # ---------------------------
+if USE_S3_STATIC or USE_S3_MEDIA:
     AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
@@ -526,28 +524,22 @@ if USE_S3:
     AWS_S3_FILE_OVERWRITE = False
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 
-    # ---------------------------
-    # Static files (CSS, JS, images)
-    # ---------------------------
+# Static files
+if USE_S3_STATIC:
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
     STATICFILES_STORAGE = "core.storage_backends.StaticStorage"
-    STATICFILES_DIRS = [BASE_DIR / "static"]
-
-    # ---------------------------
-    # Media files (user uploads)
-    # ---------------------------
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
-
 else:
-    # ---------------------------
-    # Local / WhiteNoise fallback
-    # ---------------------------
     STATIC_URL = "/static/"
     STATIC_ROOT = BASE_DIR / "staticfiles"
-    STATICFILES_DIRS = [BASE_DIR / "static"]
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# Media uploads
+if USE_S3_MEDIA:
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+    DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
+else:
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
 
