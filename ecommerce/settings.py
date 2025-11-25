@@ -495,16 +495,16 @@ SITE_ID = 1
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# -------------------------------------------------------------------
-# EMAIL
-# -------------------------------------------------------------------
-EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
-EMAIL_HOST = config("EMAIL_HOST", default="")
-EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
-EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
-EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@ecommerce.com")
+#EMAIL CONFIGURATION
+
+EMAIL_HOST=config("EMAIL_HOST")
+EMAIL_PORT=config("EMAIL_PORT", cast=int)
+EMAIL_HOST_USER=config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD=config("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS=True
+DEFAULT_FROM_EMAIL = "FoodOnline MarketPlace <nizarali790@gmail.com >"
+
+GOOGLE_API_KEY=config("GOOGLE_API_KEY")
 
 # -------------------------------------------------------------------
 # STATIC & MEDIA FILES (Heroku + S3)
