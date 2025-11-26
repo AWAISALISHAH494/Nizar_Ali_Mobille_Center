@@ -518,13 +518,24 @@ if USE_S3_STATIC or USE_S3_MEDIA:
     AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
-    AWS_DEFAULT_ACL = None
+
+    # Correct custom domain based on region
+    if AWS_S3_REGION_NAME == "us-east-1":
+        AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    else:
+        AWS_S3_CUSTOM_DOMAIN = (
+            f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+        )
+
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_FILE_OVERWRITE = False
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+    AWS_S3_SIGNATURE_VERSION = "s3v4"
 
-# Static files
+
+# -------------------------------------------------------------------
+# STATIC FILES
+# -------------------------------------------------------------------
 if USE_S3_STATIC:
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
     STATICFILES_STORAGE = "core.storage_backends.StaticStorage"
@@ -533,9 +544,14 @@ else:
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
-# Media uploads
+
+# -------------------------------------------------------------------
+# MEDIA FILES
+# -------------------------------------------------------------------
 if USE_S3_MEDIA:
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
     DEFAULT_FILE_STORAGE = "core.storage_backends.MediaStorage"
@@ -543,12 +559,14 @@ else:
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
 
-# Static files finders (without compressor)
+
+# -------------------------------------------------------------------
+# STATIC FILES FINDERS
+# -------------------------------------------------------------------
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
-
 # -------------------------------------------------------------------
 # SECURITY
 # -------------------------------------------------------------------
